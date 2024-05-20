@@ -1,0 +1,9 @@
+services:
+  trigger:
+    image: kpacktrigger:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["sleep", "infinity"]
+    env_file:
+      - .env
