@@ -49,7 +49,7 @@ done
 sleep 2
 
 # patch kuberoes resource with the new image
-kubectl patch kuberoapps.application.kubero.dev ${APP} -p "{\"spec\":{\"image\":{\"repository\":"${REPOSITORY}",\"tag\":\"${TAG}\"}}}"
+kubectl patch --type=merge kuberoapps.application.kubero.dev ${APP} -p "{\"spec\":{\"image\":{\"repository\":\"${REPOSITORY}\",\"tag\":\"${TAG}\"}}}"
 if [ $? -ne 0 ]; then
   echo "Failed to patch kubero app resource"
   exit 1
