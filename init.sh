@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # check if all required variables are set
-if [ -z "$NAME" ] || [ -z "$APP" ] || [ -z "$PHASE" ] || [ -z "$PIPELINE" ] || [ -z "$REPOSITORY" ] || [ -z "$TAG" ] || [ -z "$SERVICE_ACCOUNT" ] || [ -z "$BUILDER" ] || [ -z "$URL" ] || [ -z "$REVISION" ]; then
-  echo "One or more required variables are not set"
+if [ -z "$APP" ] || [ -z "$PHASE" ] || [ -z "$PIPELINE" ] || [ -z "$REPOSITORY" ] || [ -z "$TAG" ] || [ -z "$SERVICE_ACCOUNT" ] || [ -z "$BUILDER" ] || [ -z "$URL" ] || [ -z "$REVISION" ]; then
+  echo "$(date -u) One or more required variables are not set"
   exit 1
 fi
 
@@ -10,7 +10,7 @@ kubectl apply -f - <<EOF
 apiVersion: kpack.io/v1alpha2
 kind: Build
 metadata:
-  name: ${NAME}
+  name: ${APP}-${TAG}
 spec:
   tags:
   - ${REPOSITORY}:${TAG}
@@ -25,7 +25,7 @@ EOF
 
 # check if kubectl command failed
 if [ $? -ne 0 ]; then
-  echo "Failed to create build pod"
+  echo "$(date -u) Failed to create build pod"
   exit 1
 fi
 
@@ -35,14 +35,14 @@ sleep 2
 while true; do
   PHASE=$(kubectl get pod ${NAME}-build-pod -o jsonpath='{.status.phase}')
   if [ "$PHASE" == "Succeeded" ]; then
-    echo "Build completed successfully"
+    echo "$(date -u) Build completed successfully"
     break
   fi
   if [ "$PHASE" == "Failed" ]; then
-    echo "Build failed"
+    echo "$(date -u) uild failed"
     break
   fi
-  echo "Waiting for build to complete...$PHASE"
+  echo "$(date -u) Waiting for build to complete...$PHASE"
   sleep 1
 done
 
@@ -51,8 +51,9 @@ sleep 2
 # patch kuberoes resource with the new image
 kubectl patch --type=merge kuberoapps.application.kubero.dev ${APP} -p "{\"spec\":{\"image\":{\"repository\":\"${REPOSITORY}\",\"tag\":\"${TAG}\"}}}"
 if [ $? -ne 0 ]; then
-  echo "Failed to patch kubero app resource"
+  echo "$(date -u) Failed to patch kubero app resource"
   exit 1
 fi
 
+echo "$(date -u) Successfully patched kubero app resource"
 exit 0
