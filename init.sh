@@ -11,9 +11,6 @@ apiVersion: kpack.io/v1alpha2
 kind: Build
 metadata:
   name: ${NAME}
-  kubero.dev/app: ${APP}
-  kubero.dev/phase: ${PHASE}
-  kubero.dev/pipeline: ${PIPELINE}
 spec:
   tags:
   - ${TAG}
