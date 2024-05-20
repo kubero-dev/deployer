@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+# check if all required variables are set
+if [ -z "$NAME" ] || [ -z "$APP" ] || [ -z "$PHASE" ] || [ -z "$PIPELINE" ] || [ -z "$TAG" ] || [ -z "$SERVICE_ACCOUNT" ] || [ -z "$BUILDER" ] || [ -z "$URL" ] || [ -z "$REVISION" ]; then
+  echo "One or more required variables are not set"
+  exit 1
+fi
+
 kubectl apply -f - <<EOF
 apiVersion: kpack.io/v1alpha2
 kind: Build
