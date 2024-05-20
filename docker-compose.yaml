@@ -1,6 +1,7 @@
+# development environment
 services:
-  trigger:
-    image: kpacktrigger:latest
+  dev:
+    image: deployer:latest
     build:
       context: .
       dockerfile: Dockerfile
