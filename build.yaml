@@ -2,9 +2,9 @@ apiVersion: kpack.io/v1alpha2
 kind: Build
 metadata:
   name: sample3
-  kubero.dev/app: example
-  kubero.dev/phase: dev
-  kubero.dev/pipeline: pipelinename
+  #kubero.dev/app: example
+  #kubero.dev/phase: dev
+  #kubero.dev/pipeline: pipelinename
 spec:
   tags:
   - registry.kubero.linode.shoks.ch/kapck/example:latest
