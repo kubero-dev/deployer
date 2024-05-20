@@ -49,9 +49,9 @@ done
 sleep 2
 
 # patch kuberoes resource with the new image
-kubectl patch kuberoes ${APP} -p "{\"spec\":{\"image\":\"${IMAGE}\"}}"
+kubectl patch kuberoapps.application.kubero.dev ${APP} -p "{\"spec\":{\"image\":\"${IMAGE}\"}}"
 if [ $? -ne 0 ]; then
-  echo "Failed to patch kuberoes resource"
+  echo "Failed to patch kubero app resource"
   exit 1
 fi
 
