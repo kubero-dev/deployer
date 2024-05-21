@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # check if all required variables are set
-if [ -z "$NAME" ] || [ -z "$APP" ] || [ -z "$PHASE" ] || [ -z "$PIPELINE" ] || [ -z "$TAG" ] || [ -z "$SERVICE_ACCOUNT" ] || [ -z "$BUILDER" ] || [ -z "$URL" ] || [ -z "$REVISION" ]; then
+if [ -z "$NAME" ] || [ -z "$APP" ] || [ -z "$PHASE" ] || [ -z "$PIPELINE" ] || [ -z "$REPOSITORY" ] || [ -z "$TAG" ] || [ -z "$SERVICE_ACCOUNT" ] || [ -z "$BUILDER" ] || [ -z "$URL" ] || [ -z "$REVISION" ]; then
   echo "One or more required variables are not set"
   exit 1
 fi
@@ -13,7 +13,7 @@ metadata:
   name: ${NAME}
 spec:
   tags:
-  - ${TAG}
+  - ${REPOSITORY}:${TAG}
   serviceAccountName: ${SERVICE_ACCOUNT}
   builder:
     image: ${BUILDER}
@@ -49,7 +49,7 @@ done
 sleep 2
 
 # patch kuberoes resource with the new image
-kubectl patch kuberoapps.application.kubero.dev ${APP} -p "{\"spec\":{\"image\":\"${IMAGE}\"}}"
+kubectl patch kuberoapps.application.kubero.dev ${APP} -p "{\"spec\":{\"image\":{\"repository\":"${REPOSITORY}",\"tag\":\"${TAG}\"}}}"
 if [ $? -ne 0 ]; then
   echo "Failed to patch kubero app resource"
   exit 1
